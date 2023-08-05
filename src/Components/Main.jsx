@@ -3,7 +3,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Main = () => {
-  
   const [policyName, setPolicyName] = useState("");
   const [policyTerm, setPolicyTerm] = useState("");
   const [monthlyPremium, setMonthlyPremium] = useState("");
@@ -85,8 +84,7 @@ const Main = () => {
       totalIncentiveAmount =
         parseFloat(firstYearIncentiveAmount) + totalSecondYearIncentive;
       setTotalIncentive(totalIncentiveAmount.toFixed(2));
-    }
-    else{
+    } else {
       toast.error("Select Policy");
     }
   };
@@ -130,12 +128,12 @@ const Main = () => {
     } else {
       toast.error("Please fill out all required fields.");
     }
-  }
+  };
 
   return (
     <section className="m-10 p-4 flex flex-col md:flex-row">
       <ToastContainer position="top-right" autoClose={3000} />
-      <div className="md:w-full">
+      <div className="md:w-80">
         <p className="text-xl font-semibold">
           Welcome to the PLI Incentive Calculator page!
         </p>
@@ -169,9 +167,9 @@ const Main = () => {
             >
               Age
             </label>
-            <div className="flex space-x-2">
+            <div className="flex flex-col md:flex-row md:space-x-2">
               <input
-                className="appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="appearance-none border rounded w-80 md:w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="ageEntry"
                 type="number"
                 required
@@ -182,7 +180,7 @@ const Main = () => {
                 }}
               />
               <input
-                className="appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="appearance-none border rounded w-80 md:w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2 md:mt-0"
                 id="maturityAge"
                 type="number"
                 placeholder="Maturity Age"
@@ -205,9 +203,9 @@ const Main = () => {
             >
               Policy Premium
             </label>
-            <div className="flex space-x-2">
+            <div className="flex flex-col md:flex-row md:space-x-2">
               <input
-                className="appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="appearance-none border rounded w-80 md:w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="monthlyPremium"
                 type="number"
                 placeholder="Monthly Premium"
@@ -219,7 +217,7 @@ const Main = () => {
                 }}
               />
               <input
-                className="appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="appearance-none border rounded w-80 md:w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2 md:mt-0"
                 id="quarterlyPremium"
                 type="number"
                 required
@@ -231,21 +229,21 @@ const Main = () => {
                 }}
               />
             </div>
-            <div className="flex space-x-2 mt-2">
+            <div className="flex flex-col md:flex-row md:space-x-2 mt-2">
               <input
-                className="appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="appearance-none border rounded w-80 md:w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="halfYearlyPremium"
                 type="number"
                 required
                 placeholder="Half-Yearly Premium"
                 value={halfYearlyPremium}
                 onChange={(e) => {
-                  setQuarterlyPremium(e.target.value);
+                  setHalfYearlyPremium(e.target.value);
                   calculateOtherPremiums(e.target.value, "halfyearly");
                 }}
               />
               <input
-                className="appearance-none border rounded w-50  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="appearance-none border rounded w-80 md:w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2 md:mt-0"
                 id="yearlyPremium"
                 type="number"
                 required
@@ -258,6 +256,7 @@ const Main = () => {
               />
             </div>
           </div>
+
           <div className="mb-4">
             <label
               className="block text-sm font-medium text-gray-700 mb-1"
@@ -280,13 +279,13 @@ const Main = () => {
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             type="button"
-            onClick={handleCalculate} 
+            onClick={handleCalculate}
           >
             Calculate
           </button>
         </form>
       </div>
-      <div className="md:w-full  sm:w-full md:pl-4 md:mt-8 sm:mt-8 mt-8">
+      <div className="md:w-80  sm:w-80 md:pl-4 md:mt-8 sm:mt-8 mt-8">
         <p className="text-xl font-semibold">
           Postal Life Insurance - Incentive:
         </p>
