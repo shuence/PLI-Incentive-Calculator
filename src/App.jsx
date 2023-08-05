@@ -1,13 +1,22 @@
-import Main from './Components/Main';
+import Main from "./Components/Main";
 
 function App() {
+
+
+  const toggleMenu = () => {
+    console.log("Menu Clicked")
+  }
+
   return (
-    <main>
-      <header className="flex flex-row m-2 align-center p-2 justify-between">
-        <h1 className="text-2xl font-bold m-2 p-2 gap-8 justify-start">
-          PLI Incentive Calculator
-        </h1>
-        <nav className="text-end">
+    <>
+      <header className="p-2.5 my-2.5 text-center text-xl font-bold text-gray-900">
+        <nav>
+          <h1>PLI Incentive Calculator</h1>
+          <div className="hamburger" onclick={toggleMenu()}>
+            <div className="bar"></div>
+            <div className="bar"></div>
+            <div className="bar"></div>
+          </div>
           <ul className="flex gap-8 mr-12 pr-12 text-end">
             <li className="m-2 p-2">
               <a href="/">Home</a>
@@ -21,8 +30,8 @@ function App() {
           </ul>
         </nav>
       </header>
-      <Main/>
-    </main>
+      <Main />
+    </>
   );
 }
 
