@@ -131,7 +131,7 @@ const Main = () => {
   };
 
   return (
-    <section className="m-10 p-4 flex flex-col md:flex-row">
+    <section className="m-8 p-4 flex flex-col md:flex-row">
       <ToastContainer position="top-right" autoClose={3000} />
       <div className="md:w-1/2">
         <p className="text-xl font-semibold">
