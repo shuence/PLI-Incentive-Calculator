@@ -9,6 +9,12 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: hsla(192, 41%, 85%, 1);
+  background: -webkit-linear-gradient(90deg, hsla(192, 41%, 85%, 1) 0%, hsla(246, 24%, 75%, 1) 100%);
+  background: -moz-linear-gradient(90deg, hsla(192, 41%, 85%, 1) 0%, hsla(246, 24%, 75%, 1) 100%);
+  background: linear-gradient(90deg, hsla(192, 41%, 85%, 1) 0%, hsla(246, 24%, 75%, 1) 100%);
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#CAE3E9", endColorstr="#B4B1CF", GradientType=1 );
+
 }
 
 code {
