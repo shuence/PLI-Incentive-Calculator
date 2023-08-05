@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Main = () => {
+  
   const [policyName, setPolicyName] = useState("");
   const [policyTerm, setPolicyTerm] = useState("");
   const [monthlyPremium, setMonthlyPremium] = useState("");
@@ -9,46 +12,84 @@ const Main = () => {
   const [yearlyPremium, setYearlyPremium] = useState("");
   const [firstYearIncentive, setFirstYearIncentive] = useState(0);
   const [secondYearIncentive, setSecondYearIncentive] = useState(0);
+  const [totalIncentive, setTotalIncentive] = useState(0);
+  const [ageAtEntry, setAgeAtEntry] = useState("");
+  const [maturityAge, setMaturityAge] = useState("");
+  const [sumAssured, setSumAssured] = useState("");
+  const [policyTermCategory, setPolicyTermCategory] = useState("");
 
   const calculate = () => {
-    if (policyName === "PLI" && policyTerm === "upto15") {
-      const yearlyPremiumValue = parseFloat(yearlyPremium);
-      const firstYearIncentiveAmount = yearlyPremiumValue * 0.04;
-      const secondYearIncentiveAmount = yearlyPremiumValue * 0.01;
+    const policyTermValue = maturityAge - ageAtEntry;
+    setPolicyTerm(policyTermValue);
 
-      setFirstYearIncentive(firstYearIncentiveAmount.toFixed(2));
-      setSecondYearIncentive(secondYearIncentiveAmount.toFixed(2));
-    } else if (policyName === "PLI" && policyTerm === "15to25") {
-      const yearlyPremiumValue = parseFloat(yearlyPremium);
-      const firstYearIncentiveAmount = yearlyPremiumValue * 0.10;
-      const secondYearIncentiveAmount = yearlyPremiumValue * 0.01;
+    let policyTermCategoryValue = "";
 
-      setFirstYearIncentive(firstYearIncentiveAmount.toFixed(2));
-      setSecondYearIncentive(secondYearIncentiveAmount.toFixed(2));
-    } else if (policyName === "PLI" && policyTerm === "25plus") {
-      const yearlyPremiumValue = parseFloat(yearlyPremium);
-      const firstYearIncentiveAmount = yearlyPremiumValue * 0.20;
-      const secondYearIncentiveAmount = yearlyPremiumValue * 0.01;
-
-      setFirstYearIncentive(firstYearIncentiveAmount.toFixed(2));
-      setSecondYearIncentive(secondYearIncentiveAmount.toFixed(2));
-    } else {
-      console.log("Something went wrong")
+    if (policyTermValue <= 15) {
+      policyTermCategoryValue = "upto15";
+    } else if (policyTermValue > 15 && policyTermValue < 25) {
+      policyTermCategoryValue = "15to25";
+    } else if (policyTermValue >= 25) {
+      policyTermCategoryValue = "25plus";
     }
 
-    if (policyName === "RPLI" ){
+    setPolicyTermCategory(policyTermCategoryValue);
+
+    if (policyName === "PLI") {
       const yearlyPremiumValue = parseFloat(yearlyPremium);
-      const firstYearIncentiveAmount = yearlyPremiumValue * 0.10;
-      const secondYearIncentiveAmount = yearlyPremiumValue * 0.025;
+      let firstYearIncentiveAmount = 0;
+      let secondYearIncentiveAmount = 0;
+      let totalIncentiveAmount = 0;
+
+      if (policyTermCategoryValue === "upto15") {
+        firstYearIncentiveAmount = yearlyPremiumValue * 0.04;
+        secondYearIncentiveAmount = yearlyPremiumValue * 0.01;
+      } else if (policyTermCategoryValue === "15to25") {
+        firstYearIncentiveAmount = yearlyPremiumValue * 0.1;
+        secondYearIncentiveAmount = yearlyPremiumValue * 0.01;
+      } else if (policyTermCategoryValue === "25plus") {
+        firstYearIncentiveAmount = yearlyPremiumValue * 0.2;
+        secondYearIncentiveAmount = yearlyPremiumValue * 0.01;
+      }
+      setFirstYearIncentive(firstYearIncentiveAmount.toFixed(2));
+      setSecondYearIncentive(secondYearIncentiveAmount.toFixed(2));
+
+      const remainingPolicyYears = policyTermValue - 1;
+      const totalSecondYearIncentive =
+        parseFloat(secondYearIncentiveAmount) * remainingPolicyYears;
+      totalIncentiveAmount =
+        parseFloat(firstYearIncentiveAmount) + totalSecondYearIncentive;
+      setTotalIncentive(totalIncentiveAmount.toFixed(2));
+    } else if (policyName === "RPLI") {
+      const yearlyPremiumValue = parseFloat(yearlyPremium);
+      let firstYearIncentiveAmount = 0;
+      let secondYearIncentiveAmount = 0;
+      let totalIncentiveAmount = 0;
+
+      if (policyTermCategoryValue === "upto15") {
+        firstYearIncentiveAmount = yearlyPremiumValue * 0.1;
+        secondYearIncentiveAmount = yearlyPremiumValue * 0.025;
+      } else if (policyTermCategoryValue === "15to25") {
+        firstYearIncentiveAmount = yearlyPremiumValue * 0.1;
+        secondYearIncentiveAmount = yearlyPremiumValue * 0.025;
+      } else if (policyTermCategoryValue === "25plus") {
+        firstYearIncentiveAmount = yearlyPremiumValue * 0.1;
+        secondYearIncentiveAmount = yearlyPremiumValue * 0.025;
+      }
 
       setFirstYearIncentive(firstYearIncentiveAmount.toFixed(2));
       setSecondYearIncentive(secondYearIncentiveAmount.toFixed(2));
+
+      const remainingPolicyYears = policyTermValue - 1;
+      const totalSecondYearIncentive =
+        parseFloat(secondYearIncentiveAmount) * remainingPolicyYears;
+      totalIncentiveAmount =
+        parseFloat(firstYearIncentiveAmount) + totalSecondYearIncentive;
+      setTotalIncentive(totalIncentiveAmount.toFixed(2));
     }
     else{
-      console.log("Something Went Wrong");
+      toast.error("Select Policy");
     }
   };
-
 
   const calculateOtherPremiums = (premiumValue, premiumType) => {
     if (premiumType === "monthly") {
@@ -70,122 +111,197 @@ const Main = () => {
     }
   };
 
+  const isFormValid = () => {
+    return (
+      policyName !== "" &&
+      ageAtEntry !== "" &&
+      maturityAge !== "" &&
+      monthlyPremium !== "" &&
+      quarterlyPremium !== "" &&
+      halfYearlyPremium !== "" &&
+      yearlyPremium !== "" &&
+      sumAssured !== ""
+    );
+  };
+
+  const handleCalculate = () => {
+    if (isFormValid()) {
+      calculate();
+    } else {
+      toast.error("Please fill out all required fields.");
+    }
+  }
+
   return (
-    <section className="m-4 p-4">
-      <p className="text-xl font-semibold">
-        Welcome to the PLI Incentive Calculator page!
-      </p>
-      <p className="text-md text-gray-600 mt-2">
-        This is a simple calculator that will help you calculate your incentive.
-      </p>
-      <div className="flex flex-col justify-between">
-      <form className="mt-6">
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium text-gray-700 mb-1"
-            htmlFor="policyName"
-          >
-            Policy Name
-          </label>
-          <select
-            className="appearance-none border rounded w-80 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="policyName"
-            value={policyName}
-            onChange={(e) => setPolicyName(e.target.value)}
-          >
-            <option value="">Select Policy Name</option>
-            <option value="PLI">PLI</option>
-            <option value="RPLI">RPLI</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium text-gray-700 mb-1"
-            htmlFor="policyTerm"
-          >
-            Policy Term
-          </label>
-          <select
-            className="appearance-none border rounded w-80 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="policyTerm"
-            value={policyTerm}
-            onChange={(e) => setPolicyTerm(e.target.value)}
-          >
-            <option value="">Select Policy Term</option>
-            <option value="upto15">Up to 15 years</option>
-            <option value="15to25">More than 15 and less than 25 years</option>
-            <option value="25plus">More than 25 years</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium text-gray-700 mb-1"
-            htmlFor="policyPremium"
-          >
-            Policy Premium
-          </label>
-          <div className="flex space-x-2">
+    <section className="m-10 p-4 flex flex-col md:flex-row">
+      <ToastContainer position="top-right" autoClose={3000} />
+      <div className="md:w-1/2 md:pr-4">
+        <p className="text-xl font-semibold">
+          Welcome to the PLI Incentive Calculator page!
+        </p>
+        <p className="text-md text-gray-600 mt-2">
+          This is a simple calculator that will help you calculate your
+          incentive.
+        </p>
+        <form className="mt-6">
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium text-gray-700 mb-1"
+              htmlFor="policyName"
+            >
+              Policy Name
+            </label>
+            <select
+              className="appearance-none border rounded w-80 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="policyName"
+              value={policyName}
+              onChange={(e) => setPolicyName(e.target.value)}
+            >
+              <option value="">Select Policy Name</option>
+              <option value="PLI">PLI</option>
+              <option value="RPLI">RPLI</option>
+            </select>
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium text-gray-700 mb-1"
+              htmlFor="age"
+            >
+              Age
+            </label>
+            <div className="flex space-x-2">
+              <input
+                className="appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="ageEntry"
+                type="number"
+                required
+                placeholder="Age At Entry"
+                value={ageAtEntry}
+                onChange={(e) => {
+                  setAgeAtEntry(e.target.value);
+                }}
+              />
+              <input
+                className="appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="maturityAge"
+                type="number"
+                placeholder="Maturity Age"
+                required
+                value={maturityAge}
+                onChange={(e) => {
+                  const newMaturityAge = e.target.value;
+                  if (newMaturityAge <= 100) {
+                    setMaturityAge(newMaturityAge);
+                  }
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium text-gray-700 mb-1"
+              htmlFor="policyPremium"
+            >
+              Policy Premium
+            </label>
+            <div className="flex space-x-2">
+              <input
+                className="appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="monthlyPremium"
+                type="number"
+                placeholder="Monthly Premium"
+                required
+                value={monthlyPremium}
+                onChange={(e) => {
+                  setMonthlyPremium(e.target.value);
+                  calculateOtherPremiums(e.target.value, "monthly");
+                }}
+              />
+              <input
+                className="appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="quarterlyPremium"
+                type="number"
+                required
+                placeholder="Quarterly Premium"
+                value={quarterlyPremium}
+                onChange={(e) => {
+                  setQuarterlyPremium(e.target.value);
+                  calculateOtherPremiums(e.target.value, "quarterly");
+                }}
+              />
+            </div>
+            <div className="flex space-x-2 mt-2">
+              <input
+                className="appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="halfYearlyPremium"
+                type="number"
+                required
+                placeholder="Half-Yearly Premium"
+                value={halfYearlyPremium}
+                onChange={(e) => {
+                  setQuarterlyPremium(e.target.value);
+                  calculateOtherPremiums(e.target.value, "halfyearly");
+                }}
+              />
+              <input
+                className="appearance-none border rounded w-50  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="yearlyPremium"
+                type="number"
+                required
+                placeholder="Yearly Premium"
+                value={yearlyPremium}
+                onChange={(e) => {
+                  setYearlyPremium(e.target.value);
+                  calculateOtherPremiums(e.target.value, "yearly");
+                }}
+              />
+            </div>
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium text-gray-700 mb-1"
+              htmlFor="policyPremium"
+            >
+              Sum Assured
+            </label>
             <input
-              className="appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="monthlyPremium"
+              className="appearance-none border rounded w-80 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="sumAssured"
               type="number"
-              placeholder="Monthly Premium"
-              value={monthlyPremium}
+              placeholder="Sum Assured"
+              required
+              value={sumAssured}
               onChange={(e) => {
-                setMonthlyPremium(e.target.value);
-                calculateOtherPremiums(e.target.value, "monthly");
-              }}
-            />
-            <input
-              className="appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="quarterlyPremium"
-              type="number"
-              placeholder="Quarterly Premium"
-              value={quarterlyPremium}
-              onChange={(e) => {
-                setQuarterlyPremium(e.target.value);
-                calculateOtherPremiums(e.target.value, "quarterly");
+                setSumAssured(e.target.value);
               }}
             />
           </div>
-          <div className="flex space-x-2 mt-2">
-            <input
-              className="appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="halfYearlyPremium"
-              type="number"
-              placeholder="Half-Yearly Premium"
-              value={halfYearlyPremium}
-              onChange={(e) => {
-                setQuarterlyPremium(e.target.value);
-                calculateOtherPremiums(e.target.value, "halfyearly");
-              }}
-            />
-            <input
-              className="appearance-none border rounded w-50  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="yearlyPremium"
-              type="number"
-              placeholder="Yearly Premium"
-              value={yearlyPremium}
-              onChange={(e) => {
-                setYearlyPremium(e.target.value);
-                calculateOtherPremiums(e.target.value, "yearly");
-              }}
-            />
-          </div>
-        </div>
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          type="button"
-          onClick={calculate}
-        >
-          Calculate
-        </button>
-      </form>
-      <div className="mt-4">
-        <p className="font-semibold">Incentive Amount:</p>
-        <p>1st Year Incentive: {firstYearIncentive}</p>
-        <p>After 1st Year Incentive: {secondYearIncentive}</p>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            type="button"
+            onClick={handleCalculate} 
+          >
+            Calculate
+          </button>
+        </form>
       </div>
+      <div className="md:w-1/2 md:pl-4 md:mt-8 sm:mt-8 mt-8">
+        <p className="text-xl font-semibold">
+          Postal Life Insurance - Incentive:
+        </p>
+        <p className="pt-2">Policy: {policyName}</p>
+        <p className="pt-2">Policy Term Category: {policyTermCategory}</p>
+        <p className="pt-2">Policy Age: {policyTerm}</p>
+        <p className="pt-2">Age at Entry: {ageAtEntry}</p>
+        <p className="pt-2">Maturity Age: {maturityAge}</p>
+        <p className="pt-2">Sum Assured: {sumAssured}</p>
+        <p className="mt-4 text-xl font-semibold">Incentive Amount:</p>
+        <p className="pt-2">1st Year Incentive: {firstYearIncentive}</p>
+        <p className="pt-2">After 1st Year Incentive: {secondYearIncentive}</p>
+        <p className="pt-2">
+          Total Incentive of {policyTerm} Year: {totalIncentive}
+        </p>
       </div>
     </section>
   );
