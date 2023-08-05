@@ -135,7 +135,7 @@ const Main = () => {
   return (
     <section className="m-10 p-4 flex flex-col md:flex-row">
       <ToastContainer position="top-right" autoClose={3000} />
-      <div className="md:w-1/2 md:pr-4">
+      <div className="md:w-full">
         <p className="text-xl font-semibold">
           Welcome to the PLI Incentive Calculator page!
         </p>
@@ -286,7 +286,7 @@ const Main = () => {
           </button>
         </form>
       </div>
-      <div className="md:w-1/2 md:pl-4 md:mt-8 sm:mt-8 mt-8">
+      <div className="md:w-full  sm:w-full md:pl-4 md:mt-8 sm:mt-8 mt-8">
         <p className="text-xl font-semibold">
           Postal Life Insurance - Incentive:
         </p>
