@@ -134,7 +134,7 @@ const Main = () => {
     <section className="m-8 p-4 flex flex-col md:flex-row">
       <ToastContainer position="top-right" autoClose={3000} />
       <div className="md:w-1/2">
-        <p className="text-xl font-semibold">
+        <p className="text-xl font-semibold text-rose-900">
           Welcome to the PLI Incentive Calculator page!
         </p>
         <p className="text-md text-gray-600 mt-2">
@@ -277,7 +277,7 @@ const Main = () => {
             />
           </div>
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded"
             type="button"
             onClick={handleCalculate}
           >
@@ -285,8 +285,8 @@ const Main = () => {
           </button>
         </form>
       </div>
-      <div className="md:w-1/2  sm:w-80 md:pl-4 md:mt-8 sm:mt-8 mt-8">
-        <p className="text-xl font-semibold">
+      <div className="md:w-1/2 sm:w-80 md:pl-4 md:mt-8 sm:mt-8 mt-8">
+        <p className="text-xl font-semibold text-rose-800">
           Postal Life Insurance - Incentive:
         </p>
         <p className="pt-2">Policy: {policyName}</p>
@@ -295,7 +295,7 @@ const Main = () => {
         <p className="pt-2">Age at Entry: {ageAtEntry}</p>
         <p className="pt-2">Maturity Age: {maturityAge}</p>
         <p className="pt-2">Sum Assured: {sumAssured}</p>
-        <p className="mt-4 text-xl font-semibold">Incentive Amount:</p>
+        <p className="mt-4 text-xl font-semibold text-rose-800">Incentive Amount:</p>
         <p className="pt-2">1st Year Incentive: {firstYearIncentive}</p>
         <p className="pt-2">After 1st Year Incentive: {secondYearIncentive}</p>
         <p className="pt-2">
